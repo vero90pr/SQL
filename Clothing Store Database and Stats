@@ -1,0 +1,29 @@
+-Create a clothing store database 
+
+CREATE TABLE clothes (id INTEGER PRIMARY KEY, name TEXT, size TEXT, quantity INTEGER, price INTEGER);
+
+INSERT INTO clothes VALUES
+(1, "pants", "small", 5, 20),
+(2, "pants", "medium", 40, 20),
+(3, "pants", "large", 34, 20),
+(4, "shirts", "small", 29, 13),
+(5, "shirts", "medium", 12, 13),
+(6, "shirts", "large", 34, 13),
+(7, "bras", "small", 22, 40),
+(8, "bras", "medium", 18, 40),
+(9, "bras", "large", 9, 40),
+(10, "shorts", "small", 10, 15),
+(11, "shorts", "medium", 21, 15),
+(12, "shorts", "large", 37, 15),
+(13, "skirts", "small", 40, 26),
+(14, "skirts", "medium", 32, 26),
+(15, "skirts", "large", 30, 26);
+
+-Display the database ordered by price
+SELECT * FROM clothes ORDER BY PRICE desc;
+
+-What are the total of clothing articles in stock
+SELECT SUM (quantity) FROM clothes; 
+
+-What clothing items are lower in stock?
+SELECT * FROM clothes WHERE quantity <=20;
