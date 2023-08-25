@@ -1,0 +1,78 @@
+--In this project I'm joining the following three tables
+
+
+CREATE TABLE artists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, country TEXT);
+
+INSERT INTO artists (name, country) VALUES 
+("Bad Bunny", "Puerto Rico"),
+("Taylor Swift", "United States"),
+("BTS", "South Korea"),
+("Karol G", "Colombia"),
+("Rihanna", "Barbados"),
+("Shakira", "Colombia"),
+("Beyonce", "United States"),
+("Harry Styles", "United Kingdom"),
+("Daddy Yankee", "Puerto Rico"),
+("Lady Gaga", "United States"),
+("Dua Lipa", "United States"),
+("One Republic", "United States"),
+("Elton John", "United Kingdom"),
+("Adele", "United Kingdom"),
+("Peso Pluma", "Mexico");
+
+CREATE TABLE songs (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, release_year INTEGER, artist_id INTEGER);
+
+INSERT INTO songs (name, release_year, artist_id) VALUES
+("Efecto", 2022, 1),
+("El Apagon", 2022, 1),
+("Blank Space", 2014, 2),
+("Shake it off", 2016, 2),
+("Butter", 2021, 3),
+("Dynamite", 2020, 3),
+("Bichota", 2021, 4),
+("Provenza", 2022, 4),
+("Diamonds", 2012, 5),
+("Rude Boy", 2009, 5),
+("Hips Don't Lie", 2006, 6),
+("Whenever, Wherever", 2001, 6),
+("Crazy in Love", 2003, 7),
+("Halo", 2008, 7),
+("Watermelon Sugar", 2019, 8),
+("As It Was", 2022, 8),
+("Gasolina", 2004, 9),
+("Rompe", 2005, 9),
+("Bad Romance", 2009, 10),
+("Born This Way", 2011, 10);
+
+CREATE TABLE featurings (id INTEGER PRIMARY KEY, artist1_id INTEGER, artist2_id INTEGER);
+
+INSERT INTO featurings (artist1_id, artist2_id) VALUES
+(1,4),
+(1,9),
+(4,6),
+(4,9),
+(5,6),
+(6,7),
+(7,10);
+
+
+
+#1. What songs are from Puerto Rican artists?
+SELECT songs.name, artists.name FROM songs
+    JOIN artists
+    ON songs.artist_id = artists.id
+    WHERE artists.country = "Puerto Rico";
+
+#2. What songs are from the year 2020 and forward?
+SELECT songs.name AS "songs" , artists.name AS "singers", songs.release_year FROM artists
+    JOIN songs
+    ON artists.id = songs.artist_id
+    WHERE songs.release_year >= 2020
+    ORDER BY songs.release_year ASC;
+
+#3. Which artists have collaborated with the other artists?
+SELECT a.name, b.name FROM featurings
+    JOIN artists a
+    ON featurings.artist1_id = a.id
+    JOIN artists b
+    ON featurings.artist2_id = b.id; 
