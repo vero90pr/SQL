@@ -1,13 +1,13 @@
 --In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. 
 
-#1. How many orders were placed in January?;
+#1. How many orders were placed in January?
 
 SELECT COUNT(orderID) 
 FROM BIT_DB.JanSales
     WHERE length(orderID) =6
     AND orderID <> 'Order ID';
 
-#2. How many of those orders were for an iphone?;
+#2. How many of those orders were for an iphone?
 
 SELECT COUNT(orderID) 
 FROM BIT_DB.JanSales
@@ -15,7 +15,7 @@ FROM BIT_DB.JanSales
     AND orderID <> 'Order ID'
     AND product = 'iPhone';
 
-#3. Select the customer account numbers for all the ordes that were placed in February.;
+#3. Select the customer account numbers for all the ordes that were placed in February.
 
 SELECT cust.acctnum 
 FROM BIT_DB.customers AS cust
@@ -24,16 +24,35 @@ FROM BIT_DB.customers AS cust
     WHERE length(orderID) =6
     AND orderID <> 'Order ID';
     
-#4. Which product was the cheapest one sold in January, and what was the price?;
+#4. Which product was the cheapest one sold in January, and what was the price?
 
 SELECT product, MIN(price) AS price
 FROM BIT_DB.JanSales Jan 
     GROUP BY product, price 
     ORDER BY price ASC LIMIT 1;
     
-#5. What is the total revenue for each product sold in January?; 
+#5. What is the total revenue for each product sold in January?
 
 SELECT product, SUM(quantity)*price AS revenue 
 FROM BIT_DB.JanSales
     GROUP BY product
     ORDER BY revenue DESC;
+
+#6. Which products were sold in February at 548 Lincoln St, Seattle, WA 98101? 
+How many were sold, and what was the total revenue?
+
+SELECT product, SUM(quantity), SUM(quantity)*price AS revenue 
+FROM BIT_DB.FebSales
+    WHERE location = '548 Lincoln St, Seattle, WA 98101'
+    GROUP BY product;
+
+#7. How many customers ordered more than 2 products at a time in February,
+and what was the average amount spent for those customers?;    
+
+SELECT COUNT(cust.acctnum) AS customers, AVG(quantity*price) AS avg_spent
+FROM BIT_DB.customers AS cust
+    JOIN BIT_DB.FebSales AS feb
+    ON cust.order_id = feb.orderid
+    WHERE feb.quantity >=2
+    AND length(orderID) =6
+    AND orderID <> 'Order ID';
