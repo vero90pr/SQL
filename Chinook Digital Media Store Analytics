@@ -118,3 +118,57 @@ FROM chinook.invoices AS i
     ORDER BY ROUND(SUM(i.total)) DESC
     LIMIT 1;
 
+#15. What is the range of dates of the invoices?
+
+SELECT MIN(InvoiceDate), MAX(InvoiceDate)
+FROM chinook.invoices;
+
+#16. What are the most recent invoices by customer ID?
+
+SELECT CustomerId, InvoiceDate
+FROM (SELECT * FROM chinook.invoices 
+    ORDER BY CustomerId, InvoiceDate desc) 
+    GROUP BY CustomerId;
+    
+#17. Create a column that says which customers are active or inactive (meaning that haven't bought anything since 2012).
+
+SELECT CustomerId, InvoiceDate,
+    CASE WHEN InvoiceDate >'2013%' THEN 'active'
+    ELSE 'inactive' 
+    END ActivityStatus
+FROM (SELECT * FROM chinook.invoices 
+    ORDER BY CustomerId, InvoiceDate desc) 
+    GROUP BY CustomerId;
+
+18. What are 10 names of the most sold tracks?
+
+SELECT ii.TrackId, t.Name, COUNT(ii.TrackID) AS 'TimesSold'
+FROM chinook.invoice_items AS ii
+    JOIN chinook.tracks AS t
+    ON ii.TrackId = t.TrackId
+    GROUP BY ii.TrackId
+    ORDER BY COUNT(ii.TrackID) DESC
+    LIMIT 10;
+
+#19. What country spent the most money?
+
+WITH citiesCTE AS (
+SELECT BillingCity, BillingCountry, ROUND(SUM(total)) AS AmountSpent
+FROM invoices
+    GROUP BY BillingCountry, BillingCity)
+
+SELECT BillingCountry, SUM(AmountSpent) AS AmountSpent
+FROM citiesCTE
+    GROUP BY BillingCountry
+    ORDER BY AmountSpent DESC;
+
+#20. What is the average sold by country?;
+
+WITH citiesCTE AS (
+SELECT BillingCity, BillingCountry, ROUND(SUM(total)) AS AmountSpent
+FROM invoices
+    GROUP BY BillingCountry, BillingCity)
+    
+SELECT BillingCity, BillingCountry, AmountSpent, 
+    AVG(AmountSpent) OVER (PARTITION BY BillingCountry) AS 'AvgSold'
+FROM citiesCTE;
