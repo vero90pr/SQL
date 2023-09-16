@@ -1,5 +1,4 @@
-
-
+--For this project, I'm querying a database with multiple tables in it to quantify statistics about customers and orders from a Digital media store.
 
 #1. Show Customers (their full names, customer ID, and country) who are not in the US.
 
